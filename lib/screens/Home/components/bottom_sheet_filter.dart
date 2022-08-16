@@ -15,6 +15,7 @@ class BottomSheetFilter extends StatefulWidget {
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
   final controller = HomeController.instance;
+  final model = HomeController.filterModelInstance;
 
   _setFiltersInStorage({required Filter filters}) async {
     final prefs = await SharedPreferences.getInstance();
@@ -26,15 +27,15 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
 
   _onFilter() async {
     var filters = Filter(
-        isSupply: controller.showSupply.value,
-        isFertigation: controller.showFertigation.value,
-        isPlanting: controller.showPlanting.value,
-        isProduction: controller.showProduction.value);
+        isSupply: model.showSupply.value,
+        isFertigation: model.showFertigation.value,
+        isPlanting: model.showPlanting.value,
+        isProduction: model.showProduction.value);
 
-    var isFiltersActive = await controller.isFilterActive(filters: filters);
+    var isFiltersActive = await controller.filtersActive(filters: filters);
 
-    var originalNotes = controller.notes.value;
-    var notesFiltered = controller.onFilterNotesByType(filters: filters);
+    var originalNotes = model.notes.value;
+    var notesFiltered = controller.filterNotes(filters: filters);
 
     await _setFiltersInStorage(filters: filters);
 
@@ -49,19 +50,19 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
   void initState() {
     super.initState();
 
-    controller.showSupply.addListener(() {
+    model.showSupply.addListener(() {
       if (mounted) setState(() {});
     });
 
-    controller.showFertigation.addListener(() {
+    model.showFertigation.addListener(() {
       if (mounted) setState(() {});
     });
 
-    controller.showPlanting.addListener(() {
+    model.showPlanting.addListener(() {
       if (mounted) setState(() {});
     });
 
-    controller.showProduction.addListener(() {
+    model.showProduction.addListener(() {
       if (mounted) setState(() {});
     });
   }
@@ -72,10 +73,10 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
   }
 
   _contentFilter() {
-    var supplyFilter = controller.showSupply;
-    var fertigationFilter = controller.showFertigation;
-    var plantingFilter = controller.showPlanting;
-    var productionFilter = controller.showProduction;
+    var supplyFilter = model.showSupply;
+    var fertigationFilter = model.showFertigation;
+    var plantingFilter = model.showPlanting;
+    var productionFilter = model.showProduction;
 
     return SingleChildScrollView(
       child: Column(
@@ -87,21 +88,21 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
           _switchItem(
               title: 'Insumo',
               isActive: supplyFilter.value,
-              onChanged: () => controller.toogleFilter(filter: supplyFilter)),
+              onChanged: () => controller.filterToogle(filter: supplyFilter)),
           _switchItem(
               title: 'Fertirrigação',
               isActive: fertigationFilter.value,
               onChanged: () =>
-                  controller.toogleFilter(filter: fertigationFilter)),
+                  controller.filterToogle(filter: fertigationFilter)),
           _switchItem(
               title: 'Plantio',
               isActive: plantingFilter.value,
-              onChanged: () => controller.toogleFilter(filter: plantingFilter)),
+              onChanged: () => controller.filterToogle(filter: plantingFilter)),
           _switchItem(
               title: 'Produção',
               isActive: productionFilter.value,
               onChanged: () =>
-                  controller.toogleFilter(filter: productionFilter)),
+                  controller.filterToogle(filter: productionFilter)),
           _divisor(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),

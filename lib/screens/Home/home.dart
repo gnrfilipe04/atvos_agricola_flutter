@@ -1,11 +1,9 @@
 import 'package:atvos_agricola/components/ListCard/list_card.dart';
 import 'package:atvos_agricola/models/card_info.dart';
-import 'package:atvos_agricola/models/filter.dart';
 import 'package:atvos_agricola/screens/Home/components/bottom_sheet_filter.dart';
 import 'package:atvos_agricola/screens/Home/controllers/home_controller.dart';
 import 'package:atvos_agricola/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,9 +13,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-
   final controller = HomeController.instance;
+  final model = HomeController.filterModelInstance;
 
   List<CardInfo> notes = [
     CardInfo(
@@ -105,49 +102,19 @@ class _HomeState extends State<Home> {
         title: 'nº 455655'),
   ];
 
-  Future<void> _setInitialNotesFiltered(List<CardInfo> initNotes) async {
-    final storageFilters = await controller.getFiltersStorage();
-
-    var filters = Filter(
-        isSupply: storageFilters.isSupply,
-        isFertigation: storageFilters.isFertigation,
-        isPlanting: storageFilters.isPlanting,
-        isProduction: storageFilters.isProduction);
-
-    var isFilterActive = await controller.isFilterActive(filters: filters);
-
-    if (isFilterActive) {
-      var notesFiltered = controller.onFilterNotesByType(filters: filters);
-      controller.setNotesFiltered(notes: notesFiltered);
-    } else {
-      controller.setNotesFiltered(notes: initNotes);
-    }
-  }
-
-  Future<void> _getStorageToFilter() async {
-    var filtersInStorage = await controller.getFiltersStorage();
-
-    controller.showSupply.value = filtersInStorage.isSupply;
-    controller.showFertigation.value = filtersInStorage.isFertigation;
-    controller.showPlanting.value = filtersInStorage.isPlanting;
-    controller.showProduction.value = filtersInStorage.isProduction;
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
 
-    _getStorageToFilter();
-    _setInitialNotesFiltered(notes);
-    controller.notes.value = notes;
+    controller.storageToFilter();
+    controller.setInitialNotesFiltered(initNotes: notes);
+    controller.setNotes(notes: notes);
 
-    controller.notesFiltered.addListener(() {
+    model.notesFiltered.addListener(() {
+      setState(() {});
+    });
+
+    controller.pageIndex.addListener(() {
       setState(() {});
     });
   }
@@ -175,7 +142,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        body: _showPageSelected(_selectedIndex, context),
+        body: _showPageSelected(controller.pageIndex.value, context),
         bottomNavigationBar: _tabBottomBar(context));
   }
 
@@ -195,7 +162,7 @@ class _HomeState extends State<Home> {
         _titleScreen(context),
         _sectionSearch(context),
         ListCard(
-          listCard: controller.notesFiltered.value,
+          listCard: controller.getNotesFiltered(),
           isAddButton: true,
         ),
       ],
@@ -293,8 +260,8 @@ class _HomeState extends State<Home> {
           showSelectedLabels: false,
           showUnselectedLabels: false,
           unselectedItemColor: CustomColors.grey,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
+          currentIndex: controller.pageIndex.value,
+          onTap: controller.onTabBarTapped,
           items: <BottomNavigationBarItem>[
             _tabBottomBarItem(Icons.ballot_outlined),
             _tabBottomBarItem(Icons.assignment_outlined),

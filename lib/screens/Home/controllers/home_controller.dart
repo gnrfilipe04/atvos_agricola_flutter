@@ -1,69 +1,87 @@
 import 'package:atvos_agricola/models/card_info.dart';
 import 'package:atvos_agricola/models/filter.dart';
+import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController {
   static HomeController instance = HomeController();
+  static FilterModel filterModelInstance = FilterModel();
+  final pageIndex = ValueNotifier<int>(0);
 
-  final showSupply = ValueNotifier<bool>(false);
-  final showFertigation = ValueNotifier<bool>(false);
-  final showPlanting = ValueNotifier<bool>(false);
-  final showProduction = ValueNotifier<bool>(false);
-
-  final notes = ValueNotifier<List<CardInfo>>([]);
-  final orders = ValueNotifier<List<CardInfo>>([]);
-
-  final notesFiltered = ValueNotifier<List<CardInfo>>([]);
-  final ordersFiltered = ValueNotifier<List<CardInfo>>([]);
-
-  Future<Filter> getFiltersStorage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final bool? showStorageSupply = prefs.getBool('isSupply');
-    final bool? showStorageFertigation = prefs.getBool('isFertigation');
-    final bool? showStoragePlanting = prefs.getBool('isPlanting');
-    final bool? showStorageProduction = prefs.getBool('isProduction');
-
-    return Filter(
-        isSupply: showStorageSupply ?? false,
-        isFertigation: showStorageFertigation ?? false,
-        isPlanting: showStoragePlanting ?? false,
-        isProduction: showStorageProduction ?? false);
-  }
-
-  toogleFilter({required ValueNotifier<bool> filter}) {
-    filter.value = !filter.value;
-  }
-
-  Future<bool> isFilterActive({required Filter filters}) async {
-    if (filters.isSupply ||
-        filters.isFertigation ||
-        filters.isPlanting ||
-        filters.isProduction) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  onFilterNotesByType({required Filter filters}) {
-    var supply = filters.isSupply ? 'Insumo' : 'empty';
-    var fertigation = filters.isFertigation ? 'Fertirrigação' : 'empty';
-    var planting = filters.isPlanting ? 'Plantio' : 'empty';
-    var production = filters.isProduction ? 'Produção' : 'empty';
-
-    List<CardInfo> allNotesFiltered = notes.value
-        .where((note) =>
-            note.title == supply ||
-            note.title == fertigation ||
-            note.title == planting ||
-            note.title == production)
-        .toList();
-
-    return allNotesFiltered;
+  filterNotesByType({required Filter filters}) {
+    return filterModelInstance.filterNotesByType(filters: filters);
   }
 
   setNotesFiltered({required List<CardInfo> notes}) {
-    notesFiltered.value = notes;
+    filterModelInstance.notesFiltered.value = notes;
+  }
+
+  initNotes({required Filter filters}) {}
+
+  filterNotes({required Filter filters}) {
+    return filterModelInstance.filterNotesByType(filters: filters);
+  }
+
+  setNotes({required List<CardInfo> notes}) {
+    filterModelInstance.notes.value = notes;
+  }
+
+  getNotesFiltered() {
+    return filterModelInstance.notesFiltered.value;
+  }
+
+  getFiltersInStorage() {
+    return filterModelInstance.getFiltersStorage();
+  }
+
+  filtersActive({required Filter filters}) {
+    return filterModelInstance.isFilterActive(filters: filters);
+  }
+
+  filterToogle({required ValueNotifier<bool> filter}) {
+    filterModelInstance.toogleFilter(filter: filter);
+  }
+
+  onChangeSwitchFilter({required Filter filters}) {
+    filterModelInstance.showSupply.value = filters.isSupply;
+    filterModelInstance.showFertigation.value = filters.isFertigation;
+    filterModelInstance.showPlanting.value = filters.isPlanting;
+    filterModelInstance.showProduction.value = filters.isProduction;
+  }
+
+  void onTabBarTapped(int index) {
+    pageIndex.value = index;
+  }
+
+  Future<void> setInitialNotesFiltered({
+    required List<CardInfo> initNotes,
+  }) async {
+    final storageFilters = await getFiltersInStorage();
+
+    var filters = Filter(
+        isSupply: storageFilters.isSupply,
+        isFertigation: storageFilters.isFertigation,
+        isPlanting: storageFilters.isPlanting,
+        isProduction: storageFilters.isProduction);
+
+    var isFilterActive = await instance.filtersActive(filters: filters);
+
+    if (isFilterActive) {
+      var notesFiltered = filterNotesByType(filters: filters);
+      setNotesFiltered(notes: notesFiltered);
+    } else {
+      setNotesFiltered(notes: initNotes);
+    }
+  }
+
+  Future<void> storageToFilter() async {
+    var filtersInStorage = await getFiltersInStorage();
+    Filter filtersSwitchValue = Filter(
+        isSupply: filtersInStorage.isSupply,
+        isFertigation: filtersInStorage.isFertigation,
+        isPlanting: filtersInStorage.isPlanting,
+        isProduction: filtersInStorage.isProduction);
+
+    onChangeSwitchFilter(filters: filtersSwitchValue);
   }
 }
