@@ -1,20 +1,37 @@
 import 'package:atvos_agricola/models/card_info.dart';
 import 'package:atvos_agricola/models/filter.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+part 'filter_model.g.dart';
 
-class FilterModel {
-  final showSupply = ValueNotifier<bool>(false);
-  final showFertigation = ValueNotifier<bool>(false);
-  final showPlanting = ValueNotifier<bool>(false);
-  final showProduction = ValueNotifier<bool>(false);
+class FilterModel = FilterModelBase with _$FilterModel;
 
-  final notes = ValueNotifier<List<CardInfo>>([]);
-  final orders = ValueNotifier<List<CardInfo>>([]);
+abstract class FilterModelBase with Store {
+  @observable
+  bool showSupply = false;
 
-  final notesFiltered = ValueNotifier<List<CardInfo>>([]);
-  final ordersFiltered = ValueNotifier<List<CardInfo>>([]);
+  @observable
+  bool showFertigation = false;
 
+  @observable
+  bool showPlanting = false;
+
+  @observable
+  bool showProduction = false;
+
+  @observable
+  List<CardInfo> notes = [];
+
+  @observable
+  List<CardInfo> orders = [];
+
+  @observable
+  List<CardInfo> notesFiltered = [];
+
+  @observable
+  List<CardInfo> ordersFiltered = [];
+
+  @action
   Future<Filter> getFiltersStorage() async {
     final prefs = await SharedPreferences.getInstance();
     final bool? showStorageSupply = prefs.getBool('isSupply');
@@ -29,10 +46,27 @@ class FilterModel {
         isProduction: showStorageProduction ?? false);
   }
 
-  toogleFilter({required ValueNotifier<bool> filter}) {
-    filter.value = !filter.value;
+  @action
+  setSupply({required dynamic filter}) {
+    showSupply = !filter;
   }
 
+  @action
+  setFertigation({required dynamic filter}) {
+    showFertigation = !filter;
+  }
+
+  @action
+  setPlanting({required dynamic filter}) {
+    showPlanting = !filter;
+  }
+
+  @action
+  setProduction({required dynamic filter}) {
+    showProduction = !filter;
+  }
+
+  @action
   Future<bool> isFilterActive({required Filter filters}) async {
     if (filters.isSupply ||
         filters.isFertigation ||
@@ -44,13 +78,14 @@ class FilterModel {
     }
   }
 
+  @action
   filterNotesByType({required Filter filters}) {
     var supply = filters.isSupply ? 'Insumo' : 'empty';
     var fertigation = filters.isFertigation ? 'Fertirrigação' : 'empty';
     var planting = filters.isPlanting ? 'Plantio' : 'empty';
     var production = filters.isProduction ? 'Produção' : 'empty';
 
-    List<CardInfo> allNotesFiltered = notes.value
+    List<CardInfo> allNotesFiltered = notes
         .where((note) =>
             note.title == supply ||
             note.title == fertigation ||
@@ -61,7 +96,8 @@ class FilterModel {
     return allNotesFiltered;
   }
 
+  @action
   setNotesFiltered({required List<CardInfo> notes}) {
-    notesFiltered.value = notes;
+    notesFiltered = notes;
   }
 }

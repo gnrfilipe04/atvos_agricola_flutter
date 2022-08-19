@@ -2,8 +2,10 @@ import 'package:atvos_agricola/components/ListCard/list_card.dart';
 import 'package:atvos_agricola/models/card_info.dart';
 import 'package:atvos_agricola/screens/Home/components/bottom_sheet_filter.dart';
 import 'package:atvos_agricola/screens/Home/controllers/home_controller.dart';
+import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
 import 'package:atvos_agricola/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,8 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final controller = HomeController.instance;
-  final model = HomeController.filterModelInstance;
+  final controller = HomeController();
 
   List<CardInfo> notes = [
     CardInfo(
@@ -109,14 +110,6 @@ class _HomeState extends State<Home> {
     controller.storageToFilter();
     controller.setInitialNotesFiltered(initNotes: notes);
     controller.setNotes(notes: notes);
-
-    model.notesFiltered.addListener(() {
-      setState(() {});
-    });
-
-    controller.pageIndex.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
@@ -142,7 +135,8 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        body: _showPageSelected(controller.pageIndex.value, context),
+        body: Observer(
+            builder: (_) => _showPageSelected(controller.pageIndex, context)),
         bottomNavigationBar: _tabBottomBar(context));
   }
 
@@ -162,7 +156,7 @@ class _HomeState extends State<Home> {
         _titleScreen(context),
         _sectionSearch(context),
         ListCard(
-          listCard: controller.getNotesFiltered(),
+          listCard: controller.filterModelInstance.notesFiltered,
           isAddButton: true,
         ),
       ],
@@ -252,20 +246,21 @@ class _HomeState extends State<Home> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: const BoxDecoration(color: Colors.transparent),
-      child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          fixedColor: Theme.of(context).primaryColor,
-          iconSize: 30,
-          elevation: 0,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          unselectedItemColor: CustomColors.grey,
-          currentIndex: controller.pageIndex.value,
-          onTap: controller.onTabBarTapped,
-          items: <BottomNavigationBarItem>[
-            _tabBottomBarItem(Icons.ballot_outlined),
-            _tabBottomBarItem(Icons.assignment_outlined),
-          ]),
+      child: Observer(
+          builder: (_) => BottomNavigationBar(
+                  backgroundColor: Colors.transparent,
+                  fixedColor: Theme.of(context).primaryColor,
+                  iconSize: 30,
+                  elevation: 0,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  unselectedItemColor: CustomColors.grey,
+                  currentIndex: controller.pageIndex,
+                  onTap: controller.onTabBarTapped,
+                  items: <BottomNavigationBarItem>[
+                    _tabBottomBarItem(Icons.ballot_outlined),
+                    _tabBottomBarItem(Icons.assignment_outlined),
+                  ])),
     );
   }
 
@@ -285,7 +280,10 @@ class _HomeState extends State<Home> {
         backgroundColor: CustomColors.blueDark,
         context: context,
         builder: (context) {
-          return const BottomSheetFilter();
+          return BottomSheetFilter(
+            model: controller.filterModelInstance,
+            controller: controller,
+          );
         });
   }
 }

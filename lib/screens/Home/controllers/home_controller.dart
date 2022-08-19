@@ -2,57 +2,90 @@ import 'package:atvos_agricola/models/card_info.dart';
 import 'package:atvos_agricola/models/filter.dart';
 import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mobx/mobx.dart';
+part 'home_controller.g.dart';
 
-class HomeController {
-  static HomeController instance = HomeController();
-  static FilterModel filterModelInstance = FilterModel();
-  final pageIndex = ValueNotifier<int>(0);
+class HomeController = HomeControllerBase with _$HomeController;
 
+abstract class HomeControllerBase with Store {
+  @observable
+  FilterModel filterModelInstance = FilterModel();
+
+  @observable
+  int pageIndex = 0;
+
+  @action
   filterNotesByType({required Filter filters}) {
     return filterModelInstance.filterNotesByType(filters: filters);
   }
 
+  @action
   setNotesFiltered({required List<CardInfo> notes}) {
-    filterModelInstance.notesFiltered.value = notes;
+    filterModelInstance.notesFiltered = notes;
   }
 
+  @action
   initNotes({required Filter filters}) {}
 
+  @action
   filterNotes({required Filter filters}) {
     return filterModelInstance.filterNotesByType(filters: filters);
   }
 
+  @action
   setNotes({required List<CardInfo> notes}) {
-    filterModelInstance.notes.value = notes;
+    filterModelInstance.notes = notes;
   }
 
+  @action
   getNotesFiltered() {
-    return filterModelInstance.notesFiltered.value;
+    return filterModelInstance.notesFiltered;
   }
 
+  @action
   getFiltersInStorage() {
     return filterModelInstance.getFiltersStorage();
   }
 
+  @action
   filtersActive({required Filter filters}) {
     return filterModelInstance.isFilterActive(filters: filters);
   }
 
-  filterToogle({required ValueNotifier<bool> filter}) {
-    filterModelInstance.toogleFilter(filter: filter);
+  @action
+  setSupply({required dynamic filter}) {
+    filterModelInstance.showSupply = !filter;
   }
 
+  @action
+  setFertigation({required dynamic filter}) {
+    filterModelInstance.showFertigation = !filter;
+  }
+
+  @action
+  setPlanting({required dynamic filter}) {
+    filterModelInstance.showPlanting = !filter;
+  }
+
+  @action
+  setProduction({required dynamic filter}) {
+    filterModelInstance.showProduction = !filter;
+  }
+
+  @action
   onChangeSwitchFilter({required Filter filters}) {
-    filterModelInstance.showSupply.value = filters.isSupply;
-    filterModelInstance.showFertigation.value = filters.isFertigation;
-    filterModelInstance.showPlanting.value = filters.isPlanting;
-    filterModelInstance.showProduction.value = filters.isProduction;
+    filterModelInstance.showSupply = filters.isSupply;
+    filterModelInstance.showFertigation = filters.isFertigation;
+    filterModelInstance.showPlanting = filters.isPlanting;
+    filterModelInstance.showProduction = filters.isProduction;
   }
 
+  @action
   void onTabBarTapped(int index) {
-    pageIndex.value = index;
+    pageIndex = index;
   }
 
+  @action
   Future<void> setInitialNotesFiltered({
     required List<CardInfo> initNotes,
   }) async {
@@ -64,7 +97,7 @@ class HomeController {
         isPlanting: storageFilters.isPlanting,
         isProduction: storageFilters.isProduction);
 
-    var isFilterActive = await instance.filtersActive(filters: filters);
+    var isFilterActive = await filtersActive(filters: filters);
 
     if (isFilterActive) {
       var notesFiltered = filterNotesByType(filters: filters);
@@ -74,6 +107,7 @@ class HomeController {
     }
   }
 
+  @action
   Future<void> storageToFilter() async {
     var filtersInStorage = await getFiltersInStorage();
     Filter filtersSwitchValue = Filter(
