@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
     return (Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _titleScreen(context),
+        _titleScreen(context, 'Apontamentos'),
         _sectionSearch(context),
         ListCard(
           listCard: controller.filterModelInstance.notesFiltered,
@@ -167,7 +167,7 @@ class _HomeState extends State<Home> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _titleScreen(context),
+        _titleScreen(context, 'Ordens'),
         _sectionSearch(context),
         ListCard(
           listCard: orders,
@@ -177,11 +177,11 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _titleScreen(BuildContext context) {
+  _titleScreen(BuildContext context, String text) {
     return (Padding(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: Text(
-        'Apontamentos',
+        text,
         textAlign: TextAlign.left,
         style: TextStyle(
             fontWeight: FontWeight.bold,
