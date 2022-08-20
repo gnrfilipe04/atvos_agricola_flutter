@@ -5,21 +5,21 @@ import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
 import 'package:atvos_agricola/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomSheetFilter extends StatefulWidget {
-  const BottomSheetFilter(
-      {Key? key, required this.model, required this.controller})
-      : super(key: key);
-
-  final FilterModel model;
-  final HomeController controller;
+  const BottomSheetFilter({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BottomSheetFilter> createState() => _BottomSheetFilterState();
 }
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
+  final controller = GetIt.I.get<HomeController>();
+
   _setFiltersInStorage({required Filter filters}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isSupply', filters.isSupply);
@@ -30,22 +30,21 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
 
   _onFilter() async {
     var filters = Filter(
-        isSupply: widget.model.showSupply,
-        isFertigation: widget.model.showFertigation,
-        isPlanting: widget.model.showPlanting,
-        isProduction: widget.model.showProduction);
+        isSupply: controller.filterModelInstance.showSupply,
+        isFertigation: controller.filterModelInstance.showFertigation,
+        isPlanting: controller.filterModelInstance.showPlanting,
+        isProduction: controller.filterModelInstance.showProduction);
 
-    var isFiltersActive =
-        await widget.controller.filtersActive(filters: filters);
+    var isFiltersActive = await controller.filtersActive(filters: filters);
 
-    var originalNotes = widget.model.notes;
-    var notesFiltered = widget.controller.filterNotes(filters: filters);
+    var originalNotes = controller.filterModelInstance.notes;
+    var notesFiltered = controller.filterNotes(filters: filters);
 
     await _setFiltersInStorage(filters: filters);
 
     isFiltersActive
-        ? widget.controller.setNotesFiltered(notes: notesFiltered)
-        : widget.controller.setNotesFiltered(notes: originalNotes);
+        ? controller.setNotesFiltered(notes: notesFiltered)
+        : controller.setNotesFiltered(notes: originalNotes);
 
     Navigator.pop(context);
   }
@@ -62,10 +61,10 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
 
   _contentFilter() {
     var filters = Filter(
-        isSupply: widget.model.showSupply,
-        isFertigation: widget.model.showFertigation,
-        isPlanting: widget.model.showPlanting,
-        isProduction: widget.model.showProduction);
+        isSupply: controller.filterModelInstance.showSupply,
+        isFertigation: controller.filterModelInstance.showFertigation,
+        isPlanting: controller.filterModelInstance.showPlanting,
+        isProduction: controller.filterModelInstance.showProduction);
 
     return SingleChildScrollView(
       child: Column(
@@ -77,23 +76,22 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
           _switchItem(
               title: 'Insumo',
               isActive: filters.isSupply,
-              onChanged: () =>
-                  widget.controller.setSupply(filter: filters.isSupply)),
+              onChanged: () => controller.setSupply(filter: filters.isSupply)),
           _switchItem(
               title: 'Fertirrigação',
               isActive: filters.isFertigation,
-              onChanged: () => widget.controller
-                  .setFertigation(filter: filters.isFertigation)),
+              onChanged: () =>
+                  controller.setFertigation(filter: filters.isFertigation)),
           _switchItem(
               title: 'Plantio',
               isActive: filters.isPlanting,
               onChanged: () =>
-                  widget.controller.setPlanting(filter: filters.isPlanting)),
+                  controller.setPlanting(filter: filters.isPlanting)),
           _switchItem(
               title: 'Produção',
               isActive: filters.isProduction,
-              onChanged: () => widget.controller
-                  .setProduction(filter: filters.isProduction)),
+              onChanged: () =>
+                  controller.setProduction(filter: filters.isProduction)),
           _divisor(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),

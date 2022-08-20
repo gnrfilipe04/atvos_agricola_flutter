@@ -6,6 +6,7 @@ import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
 import 'package:atvos_agricola/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final controller = HomeController();
+  final controller = GetIt.I.get<HomeController>();
 
   List<CardInfo> notes = [
     CardInfo(
@@ -280,10 +281,7 @@ class _HomeState extends State<Home> {
         backgroundColor: CustomColors.blueDark,
         context: context,
         builder: (context) {
-          return BottomSheetFilter(
-            model: controller.filterModelInstance,
-            controller: controller,
-          );
+          return const BottomSheetFilter();
         });
   }
 }
