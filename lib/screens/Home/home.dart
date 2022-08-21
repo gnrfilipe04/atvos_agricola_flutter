@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final controller = GetIt.I.get<HomeController>();
+  final filterModel = GetIt.I.get<FilterModel>();
 
   List<CardInfo> notes = [
     CardInfo(
@@ -157,7 +158,7 @@ class _HomeState extends State<Home> {
         _titleScreen(context, 'Apontamentos'),
         _sectionSearch(context),
         ListCard(
-          listCard: controller.filterModelInstance.notesFiltered,
+          listCard: filterModel.notesFiltered,
           isAddButton: true,
         ),
       ],

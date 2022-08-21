@@ -19,6 +19,7 @@ class BottomSheetFilter extends StatefulWidget {
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
   final controller = GetIt.I.get<HomeController>();
+  final filterModel = GetIt.I.get<FilterModel>();
 
   _setFiltersInStorage({required Filter filters}) async {
     final prefs = await SharedPreferences.getInstance();
@@ -30,14 +31,14 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
 
   _onFilter() async {
     var filters = Filter(
-        isSupply: controller.filterModelInstance.showSupply,
-        isFertigation: controller.filterModelInstance.showFertigation,
-        isPlanting: controller.filterModelInstance.showPlanting,
-        isProduction: controller.filterModelInstance.showProduction);
+        isSupply: filterModel.showSupply,
+        isFertigation: filterModel.showFertigation,
+        isPlanting: filterModel.showPlanting,
+        isProduction: filterModel.showProduction);
 
     var isFiltersActive = await controller.filtersActive(filters: filters);
 
-    var originalNotes = controller.filterModelInstance.notes;
+    var originalNotes = filterModel.notes;
     var notesFiltered = controller.filterNotes(filters: filters);
 
     await _setFiltersInStorage(filters: filters);
@@ -61,10 +62,10 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
 
   _contentFilter() {
     var filters = Filter(
-        isSupply: controller.filterModelInstance.showSupply,
-        isFertigation: controller.filterModelInstance.showFertigation,
-        isPlanting: controller.filterModelInstance.showPlanting,
-        isProduction: controller.filterModelInstance.showProduction);
+        isSupply: filterModel.showSupply,
+        isFertigation: filterModel.showFertigation,
+        isPlanting: filterModel.showPlanting,
+        isProduction: filterModel.showProduction);
 
     return SingleChildScrollView(
       child: Column(

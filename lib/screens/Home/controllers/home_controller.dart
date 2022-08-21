@@ -1,27 +1,26 @@
 import 'package:atvos_agricola/models/card_info.dart';
 import 'package:atvos_agricola/models/filter.dart';
 import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 part 'home_controller.g.dart';
 
 class HomeController = HomeControllerBase with _$HomeController;
 
 abstract class HomeControllerBase with Store {
-  @observable
-  FilterModel filterModelInstance = FilterModel();
+  final filterModel = GetIt.I.get<FilterModel>();
 
   @observable
   int pageIndex = 0;
 
   @action
   filterNotesByType({required Filter filters}) {
-    return filterModelInstance.filterNotesByType(filters: filters);
+    return filterModel.filterNotesByType(filters: filters);
   }
 
   @action
   setNotesFiltered({required List<CardInfo> notes}) {
-    filterModelInstance.notesFiltered = notes;
+    filterModel.notesFiltered = notes;
   }
 
   @action
@@ -29,55 +28,55 @@ abstract class HomeControllerBase with Store {
 
   @action
   filterNotes({required Filter filters}) {
-    return filterModelInstance.filterNotesByType(filters: filters);
+    return filterModel.filterNotesByType(filters: filters);
   }
 
   @action
   setNotes({required List<CardInfo> notes}) {
-    filterModelInstance.notes = notes;
+    filterModel.notes = notes;
   }
 
   @action
   getNotesFiltered() {
-    return filterModelInstance.notesFiltered;
+    return filterModel.notesFiltered;
   }
 
   @action
   getFiltersInStorage() {
-    return filterModelInstance.getFiltersStorage();
+    return filterModel.getFiltersStorage();
   }
 
   @action
   filtersActive({required Filter filters}) {
-    return filterModelInstance.isFilterActive(filters: filters);
+    return filterModel.isFilterActive(filters: filters);
   }
 
   @action
   setSupply({required dynamic filter}) {
-    filterModelInstance.showSupply = !filter;
+    filterModel.showSupply = !filter;
   }
 
   @action
   setFertigation({required dynamic filter}) {
-    filterModelInstance.showFertigation = !filter;
+    filterModel.showFertigation = !filter;
   }
 
   @action
   setPlanting({required dynamic filter}) {
-    filterModelInstance.showPlanting = !filter;
+    filterModel.showPlanting = !filter;
   }
 
   @action
   setProduction({required dynamic filter}) {
-    filterModelInstance.showProduction = !filter;
+    filterModel.showProduction = !filter;
   }
 
   @action
   onChangeSwitchFilter({required Filter filters}) {
-    filterModelInstance.showSupply = filters.isSupply;
-    filterModelInstance.showFertigation = filters.isFertigation;
-    filterModelInstance.showPlanting = filters.isPlanting;
-    filterModelInstance.showProduction = filters.isProduction;
+    filterModel.showSupply = filters.isSupply;
+    filterModel.showFertigation = filters.isFertigation;
+    filterModel.showPlanting = filters.isPlanting;
+    filterModel.showProduction = filters.isProduction;
   }
 
   @action

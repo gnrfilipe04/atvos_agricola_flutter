@@ -13,8 +13,8 @@ void main() {
       statusBarIconBrightness: Brightness.light));
 
   GetIt getIt = GetIt.I;
-  getIt.registerSingleton<HomeController>(HomeController());
   getIt.registerSingleton<FilterModel>(FilterModel());
+  getIt.registerSingleton<HomeController>(HomeController());
   runApp(const MyApp());
 }
 
