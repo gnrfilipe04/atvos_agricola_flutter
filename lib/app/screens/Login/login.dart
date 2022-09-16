@@ -1,4 +1,4 @@
-import 'package:atvos_agricola/screens/Login/components/form_login.dart';
+import 'package:atvos_agricola/app/screens/Login/components/form_login.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -9,7 +9,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,10 +17,7 @@ class _LoginState extends State<Login> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('logo_login.png'),
-            const FormLogin()
-          ],
+          children: [Image.asset('logo_login.png'), const FormLogin()],
         ),
       ),
     );

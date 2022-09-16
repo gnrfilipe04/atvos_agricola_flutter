@@ -1,12 +1,10 @@
-import 'package:atvos_agricola/components/CustomButton/custom_button.dart';
-import 'package:atvos_agricola/models/filter.dart';
-import 'package:atvos_agricola/screens/Home/controllers/home_controller.dart';
-import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
-import 'package:atvos_agricola/theme/colors.dart';
+import 'package:atvos_agricola/app/components/CustomButton/custom_button.dart';
+import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
+import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
+import 'package:atvos_agricola/app/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomSheetFilter extends StatefulWidget {
   const BottomSheetFilter({
@@ -19,36 +17,7 @@ class BottomSheetFilter extends StatefulWidget {
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
   final controller = GetIt.I.get<HomeController>();
-  final filterModel = GetIt.I.get<FilterModel>();
-
-  _setFiltersInStorage({required Filter filters}) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isSupply', filters.isSupply);
-    await prefs.setBool('isFertigation', filters.isFertigation);
-    await prefs.setBool('isPlanting', filters.isPlanting);
-    await prefs.setBool('isProduction', filters.isProduction);
-  }
-
-  _onFilter() async {
-    var filters = Filter(
-        isSupply: filterModel.showSupply,
-        isFertigation: filterModel.showFertigation,
-        isPlanting: filterModel.showPlanting,
-        isProduction: filterModel.showProduction);
-
-    var isFiltersActive = await controller.filtersActive(filters: filters);
-
-    var originalNotes = filterModel.notes;
-    var notesFiltered = controller.filterNotes(filters: filters);
-
-    await _setFiltersInStorage(filters: filters);
-
-    isFiltersActive
-        ? controller.setNotesFiltered(notes: notesFiltered)
-        : controller.setNotesFiltered(notes: originalNotes);
-
-    Navigator.pop(context);
-  }
+  final FiltersVm filterVm = FiltersVm();
 
   @override
   void initState() {
@@ -61,12 +30,6 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
   }
 
   _contentFilter() {
-    var filters = Filter(
-        isSupply: filterModel.showSupply,
-        isFertigation: filterModel.showFertigation,
-        isPlanting: filterModel.showPlanting,
-        isProduction: filterModel.showProduction);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,35 +37,33 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
           _line(),
           _title(title: 'Filtros'),
           _sectionTitle(title: 'Tipos'),
-          _switchItem(
-              title: 'Insumo',
-              isActive: filters.isSupply,
-              onChanged: () => controller.setSupply(filter: filters.isSupply)),
-          _switchItem(
-              title: 'Fertirrigação',
-              isActive: filters.isFertigation,
-              onChanged: () =>
-                  controller.setFertigation(filter: filters.isFertigation)),
-          _switchItem(
-              title: 'Plantio',
-              isActive: filters.isPlanting,
-              onChanged: () =>
-                  controller.setPlanting(filter: filters.isPlanting)),
-          _switchItem(
-              title: 'Produção',
-              isActive: filters.isProduction,
-              onChanged: () =>
-                  controller.setProduction(filter: filters.isProduction)),
+          _switchList(),
           _divisor(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
             child: CustomButton(
-                onPress: () => _onFilter(),
+                onPress: () => {filterVm.onFilter(), Navigator.pop(context)},
                 title: 'Aplicar',
                 bgColor: Theme.of(context).primaryColor),
           )
         ],
       ),
+    );
+  }
+
+  _switchList() {
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: filterVm.switchList.length,
+      itemBuilder: (_, index) {
+        var item = filterVm.switchList[index];
+        return Observer(
+            builder: (_) => _switchItem(
+                title: item.title,
+                isActive: item.active,
+                onChanged: () => item.setActive(!item.active)));
+      },
     );
   }
 

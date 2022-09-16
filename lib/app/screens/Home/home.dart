@@ -1,9 +1,9 @@
-import 'package:atvos_agricola/components/ListCard/list_card.dart';
-import 'package:atvos_agricola/models/card_info.dart';
-import 'package:atvos_agricola/screens/Home/components/bottom_sheet_filter.dart';
-import 'package:atvos_agricola/screens/Home/controllers/home_controller.dart';
-import 'package:atvos_agricola/screens/Home/models/filter_model.dart';
-import 'package:atvos_agricola/theme/colors.dart';
+import 'package:atvos_agricola/app/components/ListCard/list_card.dart';
+import 'package:atvos_agricola/app/screens/Home/components/bottom_sheet_filter.dart';
+import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
+import 'package:atvos_agricola/app/theme/colors.dart';
+import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
+import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -16,102 +16,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final controller = GetIt.I.get<HomeController>();
-  final filterModel = GetIt.I.get<FilterModel>();
-
-  List<CardInfo> notes = [
-    CardInfo(
-        id: 1,
-        cardId: 1,
-        centerCostCode: 124455,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Morro vermelho',
-        statusText: 'em andamento',
-        isCompleted: false,
-        title: 'Insumo'),
-    CardInfo(
-        id: 2,
-        cardId: 2,
-        centerCostCode: 124456,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Estância velha',
-        statusText: 'pronto',
-        isCompleted: true,
-        title: 'Fertirrigação'),
-    CardInfo(
-        id: 3,
-        cardId: 3,
-        centerCostCode: 124457,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Morro vermelho',
-        statusText: 'em andamento',
-        isCompleted: false,
-        title: 'Plantio'),
-    CardInfo(
-        id: 4,
-        cardId: 4,
-        centerCostCode: 124458,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Morro vermelho',
-        statusText: 'em andamento',
-        isCompleted: false,
-        title: 'Produção'),
-  ];
-
-  List<CardInfo> orders = [
-    CardInfo(
-        id: 1,
-        cardId: 1,
-        centerCostCode: 124455,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Morro vermelho',
-        statusText: 'Urgente',
-        isCompleted: false,
-        title: 'nº 455655'),
-    CardInfo(
-        id: 2,
-        cardId: 2,
-        centerCostCode: 124456,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Estância velha',
-        statusText: 'Nova',
-        isCompleted: true,
-        title: 'nº 455655'),
-    CardInfo(
-        id: 3,
-        cardId: 3,
-        centerCostCode: 124457,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Morro vermelho',
-        statusText: 'Urgente',
-        isCompleted: false,
-        title: 'nº 455655'),
-    CardInfo(
-        id: 4,
-        cardId: 4,
-        centerCostCode: 124458,
-        date: '10/02/22',
-        locationCode: 41,
-        locationDescription: 'Morro vermelho',
-        statusText: 'Urgente',
-        isCompleted: false,
-        title: 'nº 455655'),
-  ];
+  final homeController = GetIt.I.get<HomeController>();
+  final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
+  final NotesVm notesVm = GetIt.I.get<NotesVm>();
 
   @override
   void initState() {
     super.initState();
 
-    controller.storageToFilter();
-    controller.setInitialNotesFiltered(initNotes: notes);
-    controller.setNotes(notes: notes);
+    homeController.init();
   }
 
   @override
@@ -138,7 +51,8 @@ class _HomeState extends State<Home> {
           ],
         ),
         body: Observer(
-            builder: (_) => _showPageSelected(controller.pageIndex, context)),
+            builder: (_) =>
+                _showPageSelected(homeController.pageIndex, context)),
         bottomNavigationBar: _tabBottomBar(context));
   }
 
@@ -158,7 +72,7 @@ class _HomeState extends State<Home> {
         _titleScreen(context, 'Apontamentos'),
         _sectionSearch(context),
         ListCard(
-          listCard: filterModel.notesFiltered,
+          listCard: notesVm.notesFiltered,
           isAddButton: true,
         ),
       ],
@@ -172,7 +86,7 @@ class _HomeState extends State<Home> {
         _titleScreen(context, 'Ordens'),
         _sectionSearch(context),
         ListCard(
-          listCard: orders,
+          listCard: ordersVm.ordersFiltered,
           isAddButton: false,
         )
       ],
@@ -257,8 +171,8 @@ class _HomeState extends State<Home> {
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
                   unselectedItemColor: CustomColors.grey,
-                  currentIndex: controller.pageIndex,
-                  onTap: controller.onTabBarTapped,
+                  currentIndex: homeController.pageIndex,
+                  onTap: homeController.onTabBarTapped,
                   items: <BottomNavigationBarItem>[
                     _tabBottomBarItem(Icons.ballot_outlined),
                     _tabBottomBarItem(Icons.assignment_outlined),

@@ -1,5 +1,5 @@
-import 'package:atvos_agricola/models/card_info.dart';
-import 'package:atvos_agricola/theme/colors.dart';
+import 'package:atvos_agricola/app/models/card_info.dart';
+import 'package:atvos_agricola/app/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class ListCard extends StatelessWidget {
