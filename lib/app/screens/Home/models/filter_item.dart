@@ -13,4 +13,18 @@ abstract class _FilterItemBase with Store {
 
   @action
   setActive(bool value) => active = value;
+
+  @action
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'active': active,
+    };
+  }
+
+  @action
+  FilterItem fromMap(Map<String, dynamic> map) => FilterItem(
+        title: map["title"] ?? '',
+        active: map["active"] ?? false,
+      );
 }

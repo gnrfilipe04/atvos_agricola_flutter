@@ -16,17 +16,18 @@ class BottomSheetFilter extends StatefulWidget {
 }
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
-  final controller = GetIt.I.get<HomeController>();
-  final FiltersVm filterVm = FiltersVm();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final homeController = GetIt.I.get<HomeController>();
+  final filterVm = GetIt.I.get<FiltersVm>();
 
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) => _contentFilter());
+  }
+
+  onFilter() {
+    homeController.pageIndex == 0
+        ? filterVm.filterNotes()
+        : filterVm.filterOrders();
   }
 
   _contentFilter() {
@@ -42,7 +43,7 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
             child: CustomButton(
-                onPress: () => {filterVm.onFilter(), Navigator.pop(context)},
+                onPress: () => {onFilter(), Navigator.pop(context)},
                 title: 'Aplicar',
                 bgColor: Theme.of(context).primaryColor),
           )

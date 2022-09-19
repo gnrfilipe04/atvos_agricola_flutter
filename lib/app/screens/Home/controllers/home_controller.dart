@@ -1,4 +1,5 @@
 import 'package:atvos_agricola/app/models/card_info.dart';
+import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
 import 'package:get_it/get_it.dart';
@@ -10,6 +11,7 @@ class HomeController = HomeControllerBase with _$HomeController;
 abstract class HomeControllerBase with Store {
   final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
   final NotesVm notesVm = GetIt.I.get<NotesVm>();
+  final FiltersVm filterVm = GetIt.I.get<FiltersVm>();
 
   List<CardInfo> notes = [
     CardInfo(
@@ -104,6 +106,8 @@ abstract class HomeControllerBase with Store {
   init() {
     notesVm.setInitialNotes(newNotes: notes);
     ordersVm.setInitialOrders(newOrders: orders);
+
+    filterVm.getFiltersInStorage();
   }
 
   @action

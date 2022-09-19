@@ -25,23 +25,6 @@ mixin _$FiltersVm on _FiltersVmBase, Store {
     });
   }
 
-  late final _$getFiltersStorageAsyncAction =
-      AsyncAction('_FiltersVmBase.getFiltersStorage', context: context);
-
-  @override
-  Future<List<FilterItem>> getFiltersStorage() {
-    return _$getFiltersStorageAsyncAction.run(() => super.getFiltersStorage());
-  }
-
-  late final _$isFilterActiveAsyncAction =
-      AsyncAction('_FiltersVmBase.isFilterActive', context: context);
-
-  @override
-  Future<bool> isFilterActive({required Filter filters}) {
-    return _$isFilterActiveAsyncAction
-        .run(() => super.isFilterActive(filters: filters));
-  }
-
   late final _$setFiltersInStorageAsyncAction =
       AsyncAction('_FiltersVmBase.setFiltersInStorage', context: context);
 
@@ -55,9 +38,9 @@ mixin _$FiltersVm on _FiltersVmBase, Store {
       AsyncAction('_FiltersVmBase.getFiltersInStorage', context: context);
 
   @override
-  Future getFiltersInStorage({required List<FilterItem> filterList}) {
+  Future getFiltersInStorage() {
     return _$getFiltersInStorageAsyncAction
-        .run(() => super.getFiltersInStorage(filterList: filterList));
+        .run(() => super.getFiltersInStorage());
   }
 
   late final _$_FiltersVmBaseActionController =
@@ -108,17 +91,6 @@ mixin _$FiltersVm on _FiltersVmBase, Store {
   }
 
   @override
-  dynamic setNotesFiltered({required List<CardInfo> notes}) {
-    final _$actionInfo = _$_FiltersVmBaseActionController.startAction(
-        name: '_FiltersVmBase.setNotesFiltered');
-    try {
-      return super.setNotesFiltered(notes: notes);
-    } finally {
-      _$_FiltersVmBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic filterNotes() {
     final _$actionInfo = _$_FiltersVmBaseActionController.startAction(
         name: '_FiltersVmBase.filterNotes');
@@ -135,17 +107,6 @@ mixin _$FiltersVm on _FiltersVmBase, Store {
         name: '_FiltersVmBase.filterOrders');
     try {
       return super.filterOrders();
-    } finally {
-      _$_FiltersVmBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic onFilter() {
-    final _$actionInfo = _$_FiltersVmBaseActionController.startAction(
-        name: '_FiltersVmBase.onFilter');
-    try {
-      return super.onFilter();
     } finally {
       _$_FiltersVmBaseActionController.endAction(_$actionInfo);
     }

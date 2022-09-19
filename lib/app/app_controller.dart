@@ -18,7 +18,7 @@ abstract class _AppControllerBase with Store {
   provider() {
     GetIt.I.registerSingleton<OrdersVm>(OrdersVm());
     GetIt.I.registerSingleton<NotesVm>(NotesVm());
-    GetIt.I.registerSingleton<HomeController>(HomeController());
     GetIt.I.registerSingleton<FiltersVm>(FiltersVm());
+    GetIt.I.registerSingleton<HomeController>(HomeController());
   }
 }

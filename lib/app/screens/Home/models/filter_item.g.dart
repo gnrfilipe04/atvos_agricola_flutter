@@ -56,6 +56,28 @@ mixin _$FilterItem on _FilterItemBase, Store {
   }
 
   @override
+  Map<String, dynamic> toJson() {
+    final _$actionInfo = _$_FilterItemBaseActionController.startAction(
+        name: '_FilterItemBase.toJson');
+    try {
+      return super.toJson();
+    } finally {
+      _$_FilterItemBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  FilterItem fromMap(Map<String, dynamic> map) {
+    final _$actionInfo = _$_FilterItemBaseActionController.startAction(
+        name: '_FilterItemBase.fromMap');
+    try {
+      return super.fromMap(map);
+    } finally {
+      _$_FilterItemBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 title: ${title},

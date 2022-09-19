@@ -1,10 +1,9 @@
+import 'dart:convert';
+
 import 'package:atvos_agricola/app/models/card_info.dart';
-import 'package:atvos_agricola/app/models/filter.dart';
-import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
 import 'package:atvos_agricola/app/screens/Home/models/filter_item.dart';
 import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +14,6 @@ class FiltersVm = _FiltersVmBase with _$FiltersVm;
 abstract class _FiltersVmBase with Store {
   final NotesVm notesVm = GetIt.I.get<NotesVm>();
   final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
-  final HomeController homeController = GetIt.I.get<HomeController>();
 
   @observable
   List<FilterItem> switchList = [
@@ -27,26 +25,6 @@ abstract class _FiltersVmBase with Store {
 
   @action
   setList(List<FilterItem> list) => switchList = list;
-
-  @action
-  Future<List<FilterItem>> getFiltersStorage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final Object? filters = prefs.get('filters');
-    List<FilterItem> switchList = [];
-    return switchList;
-  }
-
-  @action
-  Future<bool> isFilterActive({required Filter filters}) async {
-    if (filters.isSupply ||
-        filters.isFertigation ||
-        filters.isPlanting ||
-        filters.isProduction) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   @action
   List<String> getFiltersActive({required List<FilterItem> filterList}) {
@@ -81,23 +59,32 @@ abstract class _FiltersVmBase with Store {
   }
 
   @action
-  setNotesFiltered({required List<CardInfo> notes}) {
-    notes = notes;
-  }
-
-  @action
   setFiltersInStorage({required List<FilterItem> filterList}) async {
     final prefs = await SharedPreferences.getInstance();
+    final filtersToJson = jsonEncode(filterList);
 
-    filterList.forEach((e) async => await prefs.setBool(e.title, e.active));
+    await prefs.setString('filters', filtersToJson);
   }
 
   @action
-  getFiltersInStorage({required List<FilterItem> filterList}) async {}
+  getFiltersInStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final filtersInStorage = prefs.getString('filters');
+
+    if (filtersInStorage != null) {
+      final List<dynamic> filtersFromJson = jsonDecode(filtersInStorage);
+      List<FilterItem> filters = filtersFromJson
+          .map((e) => FilterItem(active: e['active'], title: e['title']))
+          .toList();
+
+      switchList = filters;
+    }
+  }
 
   @action
   filterNotes() {
     List<CardInfo> notesFiltered = filterNotesByType(filterList: switchList);
+    setFiltersInStorage(filterList: switchList);
 
     notesVm.setNotesFiltered(newNotes: notesFiltered);
   }
@@ -107,10 +94,5 @@ abstract class _FiltersVmBase with Store {
     List<CardInfo> ordersFiltered = filterNotesByType(filterList: switchList);
 
     ordersVm.setOrdersFiltered(newOrders: ordersFiltered);
-  }
-
-  @action
-  onFilter() {
-    homeController.pageIndex == 0 ? filterNotes() : filterOrders();
   }
 }
