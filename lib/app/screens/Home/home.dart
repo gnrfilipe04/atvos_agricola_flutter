@@ -1,6 +1,7 @@
 import 'package:atvos_agricola/app/components/ListCard/list_card.dart';
 import 'package:atvos_agricola/app/screens/Home/components/bottom_sheet_filter.dart';
 import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
+import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
 import 'package:atvos_agricola/app/theme/colors.dart';
 import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
@@ -19,6 +20,7 @@ class _HomeState extends State<Home> {
   final homeController = GetIt.I.get<HomeController>();
   final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
   final NotesVm notesVm = GetIt.I.get<NotesVm>();
+  final filterVm = GetIt.I.get<FiltersVm>();
 
   @override
   void initState() {
@@ -126,7 +128,9 @@ class _HomeState extends State<Home> {
         ),
         child: TextFormField(
           onChanged: (value) {
-            print(value);
+            if (homeController.pageIndex == 0) {
+              filterVm.searchNotes(value: value);
+            }
           },
           cursorColor: Theme.of(context).primaryColor,
           decoration: const InputDecoration(

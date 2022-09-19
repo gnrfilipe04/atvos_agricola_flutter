@@ -80,6 +80,17 @@ mixin _$FiltersVm on _FiltersVmBase, Store {
   }
 
   @override
+  dynamic searchNotes({required String value}) {
+    final _$actionInfo = _$_FiltersVmBaseActionController.startAction(
+        name: '_FiltersVmBase.searchNotes');
+    try {
+      return super.searchNotes(value: value);
+    } finally {
+      _$_FiltersVmBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic filterOrdersByType({required List<FilterItem> filterList}) {
     final _$actionInfo = _$_FiltersVmBaseActionController.startAction(
         name: '_FiltersVmBase.filterOrdersByType');

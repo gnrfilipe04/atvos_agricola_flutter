@@ -106,8 +106,6 @@ abstract class HomeControllerBase with Store {
   init() {
     notesVm.setInitialNotes(newNotes: notes);
     ordersVm.setInitialOrders(newOrders: orders);
-
-    filterVm.getFiltersInStorage();
   }
 
   @action

@@ -1,12 +1,13 @@
 import 'dart:convert';
 
+import 'package:atvos_agricola/app/interfaces/local_storage_interface.dart';
 import 'package:atvos_agricola/app/models/card_info.dart';
 import 'package:atvos_agricola/app/screens/Home/models/filter_item.dart';
+import 'package:atvos_agricola/app/services/shared_storage_service.dart';
 import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 part 'filters_vm.g.dart';
 
 class FiltersVm = _FiltersVmBase with _$FiltersVm;
@@ -44,7 +45,29 @@ abstract class _FiltersVmBase with Store {
         .where((element) => filtersActive.contains(element.title))
         .toList();
 
-    return notesFiltered;
+    if (filtersActive.isEmpty) {
+      return notesVm.notes;
+    } else {
+      return notesFiltered;
+    }
+  }
+
+  @action
+  searchNotes({required String value}) {
+    List<CardInfo> notesFiltered = notesVm.notes
+        .where((element) =>
+            element.centerCostCode.toString().contains(value) ||
+            element.locationDescription.toLowerCase().contains(value) ||
+            element.locationDescription.toLowerCase().contains(value) ||
+            element.statusText.toLowerCase().contains(value) ||
+            element.title.toLowerCase().contains(value))
+        .toList();
+
+    if (value.isEmpty) {
+      notesVm.notesFiltered = notesVm.notes;
+    } else {
+      notesVm.notesFiltered = notesFiltered;
+    }
   }
 
   @action
@@ -60,16 +83,16 @@ abstract class _FiltersVmBase with Store {
 
   @action
   setFiltersInStorage({required List<FilterItem> filterList}) async {
-    final prefs = await SharedPreferences.getInstance();
+    final ILocalStorage localStorage = SharedStorage();
     final filtersToJson = jsonEncode(filterList);
 
-    await prefs.setString('filters', filtersToJson);
+    await localStorage.save(key: 'filters', value: filtersToJson);
   }
 
   @action
   getFiltersInStorage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final filtersInStorage = prefs.getString('filters');
+    final ILocalStorage localStorage = SharedStorage();
+    final filtersInStorage = await localStorage.get(key: 'filters');
 
     if (filtersInStorage != null) {
       final List<dynamic> filtersFromJson = jsonDecode(filtersInStorage);
@@ -84,8 +107,6 @@ abstract class _FiltersVmBase with Store {
   @action
   filterNotes() {
     List<CardInfo> notesFiltered = filterNotesByType(filterList: switchList);
-    setFiltersInStorage(filterList: switchList);
-
     notesVm.setNotesFiltered(newNotes: notesFiltered);
   }
 
