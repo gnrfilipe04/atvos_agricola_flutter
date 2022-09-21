@@ -17,10 +17,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final homeController = GetIt.I.get<HomeController>();
+  final HomeController homeController = GetIt.I.get<HomeController>();
   final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
   final NotesVm notesVm = GetIt.I.get<NotesVm>();
-  final filterVm = GetIt.I.get<FiltersVm>();
+  final FiltersVm filterVm = GetIt.I.get<FiltersVm>();
 
   @override
   void initState() {
@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
         _sectionSearch(context),
         ListCard(
           listCard: ordersVm.ordersFiltered,
-          isAddButton: false,
+          isAddButton: true,
         )
       ],
     );
@@ -128,9 +128,7 @@ class _HomeState extends State<Home> {
         ),
         child: TextFormField(
           onChanged: (value) {
-            if (homeController.pageIndex == 0) {
-              filterVm.searchNotes(value: value);
-            }
+            homeController.onSearch(value: value);
           },
           cursorColor: Theme.of(context).primaryColor,
           decoration: const InputDecoration(

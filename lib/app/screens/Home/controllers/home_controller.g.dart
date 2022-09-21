@@ -51,6 +51,28 @@ mixin _$HomeController on HomeControllerBase, Store {
   }
 
   @override
+  dynamic onSearch({required String value}) {
+    final _$actionInfo = _$HomeControllerBaseActionController.startAction(
+        name: 'HomeControllerBase.onSearch');
+    try {
+      return super.onSearch(value: value);
+    } finally {
+      _$HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic onFilter() {
+    final _$actionInfo = _$HomeControllerBaseActionController.startAction(
+        name: 'HomeControllerBase.onFilter');
+    try {
+      return super.onFilter();
+    } finally {
+      _$HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 pageIndex: ${pageIndex}

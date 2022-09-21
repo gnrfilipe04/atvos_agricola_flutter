@@ -53,24 +53,6 @@ abstract class _FiltersVmBase with Store {
   }
 
   @action
-  searchNotes({required String value}) {
-    List<CardInfo> notesFiltered = notesVm.notes
-        .where((element) =>
-            element.centerCostCode.toString().contains(value) ||
-            element.locationDescription.toLowerCase().contains(value) ||
-            element.locationDescription.toLowerCase().contains(value) ||
-            element.statusText.toLowerCase().contains(value) ||
-            element.title.toLowerCase().contains(value))
-        .toList();
-
-    if (value.isEmpty) {
-      notesVm.notesFiltered = notesVm.notes;
-    } else {
-      notesVm.notesFiltered = notesFiltered;
-    }
-  }
-
-  @action
   filterOrdersByType({required List<FilterItem> filterList}) {
     List<String> filtersActive = getFiltersActive(filterList: filterList);
 

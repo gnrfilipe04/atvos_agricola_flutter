@@ -1,5 +1,6 @@
 import 'package:atvos_agricola/app/models/card_info.dart';
 import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
+import 'package:atvos_agricola/app/screens/Home/viewmodel/search_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
 import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
 import 'package:get_it/get_it.dart';
@@ -12,6 +13,7 @@ abstract class HomeControllerBase with Store {
   final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
   final NotesVm notesVm = GetIt.I.get<NotesVm>();
   final FiltersVm filterVm = GetIt.I.get<FiltersVm>();
+  final SearchVm searchVm = GetIt.I.get<SearchVm>();
 
   List<CardInfo> notes = [
     CardInfo(
@@ -111,5 +113,19 @@ abstract class HomeControllerBase with Store {
   @action
   void onTabBarTapped(int index) {
     pageIndex = index;
+  }
+
+  @action
+  onSearch({required String value}) {
+    if (pageIndex == 0) {
+      searchVm.searchNotes(value: value);
+    } else {
+      searchVm.searchOrders(value: value);
+    }
+  }
+
+  @action
+  onFilter() {
+    pageIndex == 0 ? filterVm.filterNotes() : filterVm.filterOrders();
   }
 }

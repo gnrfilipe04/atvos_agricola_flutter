@@ -24,12 +24,6 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
     return Observer(builder: (_) => _contentFilter());
   }
 
-  onFilter() {
-    homeController.pageIndex == 0
-        ? filterVm.filterNotes()
-        : filterVm.filterOrders();
-  }
-
   _contentFilter() {
     return SingleChildScrollView(
       child: Column(
@@ -43,7 +37,8 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
             child: CustomButton(
-                onPress: () => {onFilter(), Navigator.pop(context)},
+                onPress: () =>
+                    {homeController.onFilter(), Navigator.pop(context)},
                 title: 'Aplicar',
                 bgColor: Theme.of(context).primaryColor),
           )
