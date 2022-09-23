@@ -1,4 +1,6 @@
+import 'package:atvos_agricola/app/components/AppBar/app_bar_custom.dart';
 import 'package:atvos_agricola/app/components/ListCard/list_card.dart';
+import 'package:atvos_agricola/app/components/TitleScreen/title_screen.dart';
 import 'package:atvos_agricola/app/screens/Home/components/bottom_sheet_filter.dart';
 import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
 import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
@@ -32,26 +34,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          titleSpacing: 16,
-          toolbarHeight: 60,
-          backgroundColor: Colors.transparent,
-          title: const Padding(
-            padding: EdgeInsets.only(top: 28),
-            child: Text('Olá, Moisés!'),
-          ),
-          elevation: 0,
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 8, top: 28),
-              child: Icon(Icons.wifi, color: CustomColors.green, size: 24),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 16, top: 28),
-              child: Icon(Icons.more_vert, size: 24),
-            ),
-          ],
-        ),
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(40),
+            child: AppBarCustom(
+              title: 'Olá, Moisés',
+            )),
         body: Observer(
             builder: (_) =>
                 _showPageSelected(homeController.pageIndex, context)),
@@ -71,7 +58,7 @@ class _HomeState extends State<Home> {
     return (Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _titleScreen(context, 'Apontamentos'),
+        const TitleScreen(text: 'Apontamentos'),
         _sectionSearch(context),
         ListCard(
           listCard: notesVm.notesFiltered,
@@ -85,7 +72,7 @@ class _HomeState extends State<Home> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _titleScreen(context, 'Ordens'),
+        const TitleScreen(text: 'Ordens'),
         _sectionSearch(context),
         ListCard(
           listCard: ordersVm.ordersFiltered,
@@ -93,20 +80,6 @@ class _HomeState extends State<Home> {
         )
       ],
     );
-  }
-
-  _titleScreen(BuildContext context, String text) {
-    return (Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      child: Text(
-        text,
-        textAlign: TextAlign.left,
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).primaryColor,
-            fontSize: 24),
-      ),
-    ));
   }
 
   _sectionSearch(BuildContext context) {

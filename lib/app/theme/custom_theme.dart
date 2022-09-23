@@ -10,15 +10,15 @@ class CustomTheme with ChangeNotifier {
       splashColor: CustomColors.blueDark,
       scaffoldBackgroundColor: CustomColors.blueDark,
       fontFamily: 'Roboto',
+      colorScheme: const ColorScheme.light(primary: CustomColors.orange),
       textTheme: ThemeData.dark().textTheme,
       buttonTheme: ButtonThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
         buttonColor: CustomColors.orange,
       ),
       inputDecorationTheme: const InputDecorationTheme(
-        labelStyle: TextStyle(
-          color: CustomColors.grey
-        ),
+        labelStyle: TextStyle(color: CustomColors.grey),
         floatingLabelStyle: TextStyle(
           color: CustomColors.orange,
         ),

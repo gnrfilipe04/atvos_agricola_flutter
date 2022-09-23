@@ -1,5 +1,6 @@
 import 'package:atvos_agricola/app/app_controller.dart';
 import 'package:atvos_agricola/app/screens/Home/home.dart';
+import 'package:atvos_agricola/app/screens/Notation/notation.dart';
 import 'package:atvos_agricola/app/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -29,7 +30,7 @@ class _AppState extends State<App> {
       debugShowCheckedModeBanner: false,
       title: 'Apontamentos Agrícola',
       theme: CustomTheme.darkTheme,
-      home: const Home(),
+      home: const Notation(),
     );
   }
 }
