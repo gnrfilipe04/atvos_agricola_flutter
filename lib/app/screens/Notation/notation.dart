@@ -54,7 +54,7 @@ class _NotationState extends State<Notation> {
                               onPress: () => stepperVm.onStepCancel(),
                               horizontalPadding: 30,
                               title: 'Voltar',
-                              bgColor: CustomColors.blueDarkLight),
+                              bgColor: CustomColors.greyBlue),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: CustomButton(

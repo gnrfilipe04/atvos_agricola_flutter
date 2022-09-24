@@ -7,5 +7,6 @@ class CustomColors {
   static const Color blueDarkLight = Color.fromARGB(255, 49, 69, 84);
   static const Color white = Color.fromARGB(255, 255, 255, 255);
   static const Color grey = Color.fromARGB(255, 196, 196, 196);
+  static const Color greyBlue = Color.fromARGB(255, 63, 91, 112);
   static const Color error = Color.fromARGB(255, 229, 62, 62);
 }

@@ -29,7 +29,6 @@ abstract class _SearchVmBase with Store {
         .where((element) =>
             element.centerCostCode.toString().contains(value) ||
             element.locationDescription.toLowerCase().contains(value) ||
-            element.locationDescription.toLowerCase().contains(value) ||
             element.statusText.toLowerCase().contains(value) ||
             element.title.toLowerCase().contains(value))
         .toList();

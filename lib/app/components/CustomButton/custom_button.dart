@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton(
-      {Key? key,
-      required this.onPress,
-      required this.title,
-      required this.bgColor,
-      this.justify = false,
-      this.horizontalPadding = 0})
-      : super(key: key);
+  const CustomButton({
+    Key? key,
+    required this.onPress,
+    required this.title,
+    required this.bgColor,
+    this.justify = false,
+    this.horizontalPadding = 0,
+  }) : super(key: key);
 
   final void Function() onPress;
   final String title;
@@ -30,9 +30,7 @@ class CustomButton extends StatelessWidget {
             EdgeInsets.symmetric(vertical: 16, horizontal: horizontalPadding),
         child: Text(
           title,
-          style: const TextStyle(
-            fontSize: 16,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
     ));
