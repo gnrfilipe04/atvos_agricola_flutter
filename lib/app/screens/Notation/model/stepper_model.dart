@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-part 'stepper_vm.g.dart';
 
-class StepperVm = _StepperVmBase with _$StepperVm;
+part 'stepper_model.g.dart';
 
-abstract class _StepperVmBase with Store {
+class StepperModel = _StepperModelBase with _$StepperModel;
+
+abstract class _StepperModelBase with Store {
   @observable
   int index = 0;
 

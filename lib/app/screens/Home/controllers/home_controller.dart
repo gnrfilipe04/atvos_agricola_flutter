@@ -1,8 +1,7 @@
 import 'package:atvos_agricola/app/models/card_info.dart';
-import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
-import 'package:atvos_agricola/app/screens/Home/viewmodel/search_vm.dart';
-import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
-import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
+import 'package:atvos_agricola/app/models/filter.dart';
+import 'package:atvos_agricola/app/models/note.dart';
+import 'package:atvos_agricola/app/models/order.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 part 'home_controller.g.dart';
@@ -10,10 +9,9 @@ part 'home_controller.g.dart';
 class HomeController = HomeControllerBase with _$HomeController;
 
 abstract class HomeControllerBase with Store {
-  final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
-  final NotesVm notesVm = GetIt.I.get<NotesVm>();
-  final FiltersVm filterVm = GetIt.I.get<FiltersVm>();
-  final SearchVm searchVm = GetIt.I.get<SearchVm>();
+  final Order order = GetIt.I.get<Order>();
+  final Note note = GetIt.I.get<Note>();
+  final Filter filter = GetIt.I.get<Filter>();
 
   List<CardInfo> notes = [
     CardInfo(
@@ -106,8 +104,8 @@ abstract class HomeControllerBase with Store {
 
   @action
   init() {
-    notesVm.setInitialNotes(newNotes: notes);
-    ordersVm.setInitialOrders(newOrders: orders);
+    note.setInitialNotes(newNotes: notes);
+    order.setInitialOrders(newOrders: orders);
   }
 
   @action
@@ -118,14 +116,14 @@ abstract class HomeControllerBase with Store {
   @action
   onSearch({required String value}) {
     if (pageIndex == 0) {
-      searchVm.searchNotes(value: value);
+      note.searchNotes(value: value);
     } else {
-      searchVm.searchOrders(value: value);
+      order.searchOrders(value: value);
     }
   }
 
   @action
   onFilter() {
-    pageIndex == 0 ? filterVm.filterNotes() : filterVm.filterOrders();
+    pageIndex == 0 ? note.filterNotes() : order.filterOrders();
   }
 }

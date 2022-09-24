@@ -1,6 +1,6 @@
 import 'package:atvos_agricola/app/components/CustomButton/custom_button.dart';
+import 'package:atvos_agricola/app/models/filter.dart';
 import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
-import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
 import 'package:atvos_agricola/app/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,8 +16,8 @@ class BottomSheetFilter extends StatefulWidget {
 }
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
-  final homeController = GetIt.I.get<HomeController>();
-  final filterVm = GetIt.I.get<FiltersVm>();
+  final HomeController homeController = GetIt.I.get<HomeController>();
+  final Filter filter = GetIt.I.get<Filter>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +51,9 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: filterVm.switchList.length,
+      itemCount: filter.list.length,
       itemBuilder: (_, index) {
-        var item = filterVm.switchList[index];
+        var item = filter.list[index];
         return Observer(
             builder: (_) => _switchItem(
                 title: item.title,

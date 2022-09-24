@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'filter_item.dart';
+part of 'filter.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -56,32 +56,34 @@ mixin _$FilterItem on _FilterItemBase, Store {
   }
 
   @override
-  Map<String, dynamic> toJson() {
-    final _$actionInfo = _$_FilterItemBaseActionController.startAction(
-        name: '_FilterItemBase.toJson');
-    try {
-      return super.toJson();
-    } finally {
-      _$_FilterItemBaseActionController.endAction(_$actionInfo);
-    }
+  String toString() {
+    return '''
+title: ${title},
+active: ${active}
+    ''';
+  }
+}
+
+mixin _$Filter on _FilterBase, Store {
+  late final _$listAtom = Atom(name: '_FilterBase.list', context: context);
+
+  @override
+  List<FilterItem> get list {
+    _$listAtom.reportRead();
+    return super.list;
   }
 
   @override
-  FilterItem fromMap(Map<String, dynamic> map) {
-    final _$actionInfo = _$_FilterItemBaseActionController.startAction(
-        name: '_FilterItemBase.fromMap');
-    try {
-      return super.fromMap(map);
-    } finally {
-      _$_FilterItemBaseActionController.endAction(_$actionInfo);
-    }
+  set list(List<FilterItem> value) {
+    _$listAtom.reportWrite(value, super.list, () {
+      super.list = value;
+    });
   }
 
   @override
   String toString() {
     return '''
-title: ${title},
-active: ${active}
+list: ${list}
     ''';
   }
 }

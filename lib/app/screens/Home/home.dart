@@ -1,12 +1,12 @@
 import 'package:atvos_agricola/app/components/AppBar/app_bar_custom.dart';
 import 'package:atvos_agricola/app/components/ListCard/list_card.dart';
 import 'package:atvos_agricola/app/components/TitleScreen/title_screen.dart';
+import 'package:atvos_agricola/app/models/filter.dart';
+import 'package:atvos_agricola/app/models/note.dart';
+import 'package:atvos_agricola/app/models/order.dart';
 import 'package:atvos_agricola/app/screens/Home/components/bottom_sheet_filter.dart';
 import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
-import 'package:atvos_agricola/app/screens/Home/viewmodel/filters_vm.dart';
 import 'package:atvos_agricola/app/theme/colors.dart';
-import 'package:atvos_agricola/app/viewmodel/notes_vm.dart';
-import 'package:atvos_agricola/app/viewmodel/orders_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -20,9 +20,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final HomeController homeController = GetIt.I.get<HomeController>();
-  final OrdersVm ordersVm = GetIt.I.get<OrdersVm>();
-  final NotesVm notesVm = GetIt.I.get<NotesVm>();
-  final FiltersVm filterVm = GetIt.I.get<FiltersVm>();
+  final Order order = GetIt.I.get<Order>();
+  final Note note = GetIt.I.get<Note>();
+  final Filter filter = GetIt.I.get<Filter>();
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
         const TitleScreen(text: 'Apontamentos'),
         _sectionSearch(context),
         ListCard(
-          listCard: notesVm.notesFiltered,
+          listCard: note.notesFiltered,
           isAddButton: true,
         ),
       ],
@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
         const TitleScreen(text: 'Ordens'),
         _sectionSearch(context),
         ListCard(
-          listCard: ordersVm.ordersFiltered,
+          listCard: order.ordersFiltered,
           isAddButton: true,
         )
       ],

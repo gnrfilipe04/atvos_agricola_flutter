@@ -1,41 +1,28 @@
-class Filter {
-  bool isSupply;
-  bool isFertigation;
-  bool isPlanting;
-  bool isProduction;
+import 'package:mobx/mobx.dart';
+part 'filter.g.dart';
 
-  Filter({
-    required this.isSupply,
-    required this.isFertigation,
-    required this.isPlanting,
-    required this.isProduction,
-  });
+class FilterItem = _FilterItemBase with _$FilterItem;
 
-  factory Filter.fromJson(Map<String, dynamic> json) {
-    return Filter(
-        isSupply: json["isSupply"],
-        isFertigation: json["isFertigation"],
-        isPlanting: json["isPlanting"],
-        isProduction: json["isProduction"]);
-  }
+abstract class _FilterItemBase with Store {
+  _FilterItemBase({required this.title, required this.active});
+  @observable
+  String title = '';
 
-  factory Filter.fromMap(Map<String, dynamic> map) => Filter(
-        isSupply: map["isSupply"] ?? false,
-        isFertigation: map["isFertigation"] ?? false,
-        isPlanting: map["isPlanting"] ?? false,
-        isProduction: map["isProduction"] ?? false,
-      );
+  @observable
+  bool active = false;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'isSupply': isSupply,
-      'isFertigation': isFertigation,
-      'isPlanting': isPlanting,
-      'isProduction': isProduction
-    };
-  }
+  @action
+  setActive(bool value) => active = value;
+}
 
-  @override
-  String toString() =>
-      '{isSupply: $isSupply, isFertigation: $isFertigation, isPlanting: $isPlanting}, isProduction: $isProduction}';
+class Filter = _FilterBase with _$Filter;
+
+abstract class _FilterBase with Store {
+  @observable
+  List<FilterItem> list = [
+    FilterItem(title: 'Insumo', active: false),
+    FilterItem(title: 'Fertirrigação', active: false),
+    FilterItem(title: 'Plantio', active: false),
+    FilterItem(title: 'Produção', active: false),
+  ];
 }

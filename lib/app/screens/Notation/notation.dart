@@ -2,7 +2,7 @@ import 'package:atvos_agricola/app/components/AppBar/app_bar_custom.dart';
 import 'package:atvos_agricola/app/components/CustomButton/custom_button.dart';
 import 'package:atvos_agricola/app/components/TitleScreen/title_screen.dart';
 import 'package:atvos_agricola/app/screens/Notation/controller/notation_controller.dart';
-import 'package:atvos_agricola/app/screens/Notation/viewmodel/stepper_vm.dart';
+import 'package:atvos_agricola/app/screens/Notation/model/stepper_model.dart';
 import 'package:atvos_agricola/app/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -19,7 +19,7 @@ class _NotationState extends State<Notation> {
   final NotationController notationController =
       GetIt.I.get<NotationController>();
 
-  final StepperVm stepperVm = GetIt.I.get<StepperVm>();
+  final StepperModel stepper = GetIt.I.get<StepperModel>();
 
   @override
   void initState() {
@@ -51,14 +51,14 @@ class _NotationState extends State<Notation> {
                       return Row(
                         children: <Widget>[
                           CustomButton(
-                              onPress: () => stepperVm.onStepCancel(),
+                              onPress: () => stepper.onStepCancel(),
                               horizontalPadding: 30,
                               title: 'Voltar',
                               bgColor: CustomColors.greyBlue),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: CustomButton(
-                                onPress: () => stepperVm.onStepContinue(),
+                                onPress: () => stepper.onStepContinue(),
                                 title: 'Avançar',
                                 horizontalPadding: 30,
                                 bgColor: CustomColors.orange),
@@ -66,9 +66,9 @@ class _NotationState extends State<Notation> {
                         ],
                       );
                     },
-                    currentStep: stepperVm.index,
-                    onStepTapped: (i) => stepperVm.onStepTapped(indexTapped: i),
-                    steps: stepperVm.steps))
+                    currentStep: stepper.index,
+                    onStepTapped: (i) => stepper.onStepTapped(indexTapped: i),
+                    steps: stepper.steps))
           ],
         ));
   }

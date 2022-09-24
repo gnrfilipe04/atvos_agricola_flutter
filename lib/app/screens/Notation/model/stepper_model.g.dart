@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'stepper_vm.dart';
+part of 'stepper_model.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,9 @@ part of 'stepper_vm.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$StepperVm on _StepperVmBase, Store {
-  late final _$indexAtom = Atom(name: '_StepperVmBase.index', context: context);
+mixin _$StepperModel on _StepperModelBase, Store {
+  late final _$indexAtom =
+      Atom(name: '_StepperModelBase.index', context: context);
 
   @override
   int get index {
@@ -24,7 +25,8 @@ mixin _$StepperVm on _StepperVmBase, Store {
     });
   }
 
-  late final _$stepsAtom = Atom(name: '_StepperVmBase.steps', context: context);
+  late final _$stepsAtom =
+      Atom(name: '_StepperModelBase.steps', context: context);
 
   @override
   List<Step> get steps {
@@ -39,39 +41,39 @@ mixin _$StepperVm on _StepperVmBase, Store {
     });
   }
 
-  late final _$_StepperVmBaseActionController =
-      ActionController(name: '_StepperVmBase', context: context);
+  late final _$_StepperModelBaseActionController =
+      ActionController(name: '_StepperModelBase', context: context);
 
   @override
   dynamic onStepCancel() {
-    final _$actionInfo = _$_StepperVmBaseActionController.startAction(
-        name: '_StepperVmBase.onStepCancel');
+    final _$actionInfo = _$_StepperModelBaseActionController.startAction(
+        name: '_StepperModelBase.onStepCancel');
     try {
       return super.onStepCancel();
     } finally {
-      _$_StepperVmBaseActionController.endAction(_$actionInfo);
+      _$_StepperModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic onStepContinue() {
-    final _$actionInfo = _$_StepperVmBaseActionController.startAction(
-        name: '_StepperVmBase.onStepContinue');
+    final _$actionInfo = _$_StepperModelBaseActionController.startAction(
+        name: '_StepperModelBase.onStepContinue');
     try {
       return super.onStepContinue();
     } finally {
-      _$_StepperVmBaseActionController.endAction(_$actionInfo);
+      _$_StepperModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic onStepTapped({required int indexTapped}) {
-    final _$actionInfo = _$_StepperVmBaseActionController.startAction(
-        name: '_StepperVmBase.onStepTapped');
+    final _$actionInfo = _$_StepperModelBaseActionController.startAction(
+        name: '_StepperModelBase.onStepTapped');
     try {
       return super.onStepTapped(indexTapped: indexTapped);
     } finally {
-      _$_StepperVmBaseActionController.endAction(_$actionInfo);
+      _$_StepperModelBaseActionController.endAction(_$actionInfo);
     }
   }
 
