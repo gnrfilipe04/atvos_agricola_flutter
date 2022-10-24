@@ -3,7 +3,7 @@ import 'package:atvos_agricola/app/models/note.dart';
 import 'package:atvos_agricola/app/models/order.dart';
 import 'package:atvos_agricola/app/screens/Home/controllers/home_controller.dart';
 import 'package:atvos_agricola/app/screens/Notation/controller/notation_controller.dart';
-import 'package:atvos_agricola/app/screens/Notation/model/stepper_model.dart';
+import 'package:atvos_agricola/app/screens/Notation/models/stepper_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 part 'app_controller.g.dart';

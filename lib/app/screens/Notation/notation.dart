@@ -2,7 +2,7 @@ import 'package:atvos_agricola/app/components/AppBar/app_bar_custom.dart';
 import 'package:atvos_agricola/app/components/CustomButton/custom_button.dart';
 import 'package:atvos_agricola/app/components/TitleScreen/title_screen.dart';
 import 'package:atvos_agricola/app/screens/Notation/controller/notation_controller.dart';
-import 'package:atvos_agricola/app/screens/Notation/model/stepper_model.dart';
+import 'package:atvos_agricola/app/screens/Notation/models/stepper_model.dart';
 import 'package:atvos_agricola/app/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,10 +16,10 @@ class Notation extends StatefulWidget {
 }
 
 class _NotationState extends State<Notation> {
+  final StepperModel stepper = GetIt.I.get<StepperModel>();
+
   final NotationController notationController =
       GetIt.I.get<NotationController>();
-
-  final StepperModel stepper = GetIt.I.get<StepperModel>();
 
   @override
   void initState() {
